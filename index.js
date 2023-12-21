@@ -48,8 +48,9 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         // await client.connect();
 
+        const usersCollection = client.db('taskForgeDB').collection('users')
 
-        //auth related api
+        //auth related api---------------------------------------------------
         app.post('/jwt', async (req, res) => {
             const user = req.body
             const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '2h' })
@@ -71,6 +72,18 @@ async function run() {
             catch (err) {
                 res.status(500).send(err)
             }
+        })
+
+        //user related api-------------------------------------------
+        app.post('/users', async (req, res) => {
+            const user = req.body
+            const query = { email: user.email }
+            const isExists = await usersCollection.findOne(query)
+            if (isExists) {
+                return res.send({ message: 'User already exists in database', insertedId: null })
+            }
+            const result = await usersCollection.insertOne(user)
+            res.send(result)
         })
 
 

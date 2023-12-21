@@ -118,6 +118,15 @@ async function run() {
             const result = await taskCollection.updateOne(query, updateDoc, options)
             res.send(result)
         })
+        app.patch('/task/ongoing/:id', verifyToken, async(req, res)=>{
+            const id = req.params.id
+            const query = {_id: new ObjectId(id)}
+            const updateDoc = {
+                $set:{ongoing: true}
+            }
+            const result = await taskCollection.updateOne(query, updateDoc)
+            res.send(result)
+        })
         app.delete('/task/delete/:id', async(req, res)=>{
             const id = req.params.id
             const query = {_id: new ObjectId(id)}

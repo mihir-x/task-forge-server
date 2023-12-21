@@ -49,6 +49,7 @@ async function run() {
         // await client.connect();
 
         const usersCollection = client.db('taskForgeDB').collection('users')
+        const taskCollection = client.db('taskForgeDB').collection('tasks')
 
         //auth related api---------------------------------------------------
         app.post('/jwt', async (req, res) => {
@@ -83,6 +84,13 @@ async function run() {
                 return res.send({ message: 'User already exists in database', insertedId: null })
             }
             const result = await usersCollection.insertOne(user)
+            res.send(result)
+        })
+
+        //task related api---------------------------------------------------
+        app.post('/task', verifyToken, async(req, res)=>{
+            const data = req.body
+            const result = await taskCollection.insertOne(data)
             res.send(result)
         })
 

@@ -12,6 +12,7 @@ app.use(express.json())
 app.use(cors({
     origin: [
         'http://localhost:5173',
+        'https://candid-lollipop-465898.netlify.app',
     ],
     credentials: true,
 }))
@@ -76,7 +77,7 @@ async function run() {
         })
 
         //user related api-------------------------------------------
-        app.get('/users',verifyToken, async(req,res)=>{
+        app.get('/users', async(req,res)=>{
             const result = await usersCollection.find().toArray()
             res.send(result)
         })
